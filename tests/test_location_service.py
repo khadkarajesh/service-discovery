@@ -2,7 +2,7 @@ import requests
 from _pytest.python_api import raises
 
 from exceptions import BaseError
-from location_service import LocationService
+from services.location_service import LocationService
 
 response = {
     "type": "FeatureCollection",

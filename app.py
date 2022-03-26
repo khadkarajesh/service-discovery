@@ -5,7 +5,7 @@ from flask_restful import Api, Resource
 import logging
 
 from data import get_services
-from location_service import LocationService
+from services.location_service import LocationService
 
 logging.basicConfig(level=logging.DEBUG)
 
