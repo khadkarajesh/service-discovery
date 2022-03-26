@@ -1,5 +1,3 @@
-import os
-
 import requests
 from _pytest.python_api import raises
 

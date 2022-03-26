@@ -3,4 +3,4 @@ flask_restful
 requests
 python-dotenv
 pytest
-requests-mock
+pyproj

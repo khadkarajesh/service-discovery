@@ -4,6 +4,7 @@ from flask_restful import Api, Resource
 
 import logging
 
+from data import get_services
 from location_service import LocationService
 
 logging.basicConfig(level=logging.DEBUG)
@@ -18,7 +19,11 @@ class ServiceDiscovery(Resource):
     def get(cls):
         user_location = request.args.get("q")
         location_service = LocationService(user_location)
-        return location_service.search()
+        payload = location_service.search()
+        if len(payload.get('features')):
+            city = payload.get('features')[0].get('properties').get('city')
+            return get_services(city)
+        return {"message": "Couldn't find your location"}
 
 
 api.add_resource(ServiceDiscovery, '/discover')
