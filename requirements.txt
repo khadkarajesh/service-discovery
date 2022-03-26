@@ -1,2 +1,6 @@
 flask
 flask_restful
+requests
+python-dotenv
+pytest
+requests-mock
