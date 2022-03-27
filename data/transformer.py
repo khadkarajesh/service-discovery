@@ -13,7 +13,7 @@ CITY_MAP_FILE = DATA_PATH / "city_map.json"
 CODE_NAME_FILE = DATA_PATH / "code_name.json"
 NETWORK_WITH_CITY_FILE = DATA_PATH / "networks_with_city.txt"
 TELECOM_FILE = DATA_PATH / "telecom.csv"
-NETWORK_FILE = DATA_PATH / "networks.csv"
+NETWORK_FILE = DATA_PATH / "networks_temp.csv"
 
 location_service = LocationService()
 
@@ -31,7 +31,7 @@ def get_city(line):
 
 
 def fetch_city():
-    with open(Path.cwd() / 'data' / NETWORK_FILE) as f:
+    with open(NETWORK_FILE) as f:
         csv_file = csv.reader(f)
         next(csv_file)
         with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
@@ -50,7 +50,7 @@ def generate_code_name_mapper():
             name = re.sub(r'\([^()]*\)', '', name)
             data[code] = name.strip()
         with open(CODE_NAME_FILE, "w") as file:
-            json.dump(data, file)
+            json.dump(data, file, ensure_ascii=False, indent=2)
 
 
 def map_code_to_name(code):
@@ -67,7 +67,7 @@ class DataTransformer:
 
     def _save(self):
         with open(self.output_file, "w") as f:
-            json.dump(self.city_telecom, f, ensure_ascii=False)
+            json.dump(self.city_telecom, f, ensure_ascii=False, indent=2)
 
     def transform(self):
         self._extract_service_provider()
@@ -95,10 +95,3 @@ class DataTransformer:
                                 "4G": data[4] == '1'
                             }
                         }
-
-# transformer = DataTransformer(input_file=NETWORK_WITH_CITY_FILE, output_file=CITY_MAP_FILE)
-# transformer.transform()
-
-# generate_code_name_mapper()
-
-# fetch_city()
