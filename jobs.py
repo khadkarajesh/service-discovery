@@ -1,6 +1,6 @@
 from core import rq
-from data.transformer import fetch_city, generate_code_name_mapper, DataTransformer, NETWORK_WITH_CITY_FILE, \
-    CITY_MAP_FILE
+from data.transformer import DataTransformer
+from services.city_extractor_service import generate_code_name_mapper, fetch_city, NETWORK_WITH_CITY_FILE, CITY_MAP_FILE
 
 
 @rq.job(timeout=3600)
