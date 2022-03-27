@@ -3,7 +3,7 @@ import json
 from services.city_extractor_service import map_code_to_name
 
 
-class DataTransformer:
+class ServiceTransformer:
     def __init__(self, input_file, output_file):
         self.city_telecom = {}
         self.input_file = input_file
