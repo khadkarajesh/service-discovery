@@ -1,10 +1,10 @@
 from flask_restful import Resource
 
-from data.transformer import fetch_city
+from jobs import get_city_for_networks
 
 
 class CityExtractor(Resource):
     @classmethod
     def get(cls):
-        fetch_city()
-        return {"success": True}
+        _ = get_city_for_networks.queue()
+        return {"message": "job initiated to fetch city for networks"}

@@ -13,7 +13,7 @@ CITY_MAP_FILE = DATA_PATH / "city_map.json"
 CODE_NAME_FILE = DATA_PATH / "code_name.json"
 NETWORK_WITH_CITY_FILE = DATA_PATH / "networks_with_city.txt"
 TELECOM_FILE = DATA_PATH / "telecom.csv"
-NETWORK_FILE = DATA_PATH / "networks_temp.csv"
+NETWORK_FILE = DATA_PATH / "networks.csv"
 
 location_service = LocationService()
 

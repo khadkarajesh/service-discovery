@@ -4,3 +4,4 @@ requests
 python-dotenv
 pytest
 pyproj
+Flask-RQ2
