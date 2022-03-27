@@ -1,19 +1,29 @@
 import os
 
-import requests as requests
+import requests
 
 from exceptions import BaseError
 
+errors = {
+    "GEO_CODE_FAILURE": "No Result found",
+    "GEO_CODE_REVERSE_FAILURE": "Couldn't reverse geo-code"
+}
+
 
 class LocationService:
-    def __init__(self, user_location):
-        self.user_location = user_location
-        self.base_url = os.environ.get('ADDRESS_SERVICE_API_BASE_URL')
+    def __init__(self):
+        self.base_url = os.environ.get('ADDRESS_SERVICE_API_BASE_URL', 'https://api-adresse.data.gouv.fr')
+        self.session = requests.Session()
 
-    def search(self):
+    def search(self, location):
         search_url = self.base_url + "/search"
-        response = requests.get(search_url, params={'q': self.user_location})
+        response = self.session.get(search_url, params={'q': location})
         if response.status_code == 200:
-            data = response.json()
-            return data
-        raise BaseError(message="No Result found", error="GEO_CODE_FAILURE", status_code=400)
+            return response.json()
+        raise BaseError(message=errors.get("GEO_CODE_FAILURE"), error="GEO_CODE_FAILURE", status_code=500)
+
+    def reverse(self, longitude, latitude):
+        reverse_geocode_url = self.base_url + "/reverse"
+        response = self.session.get(reverse_geocode_url, params={"lat": latitude, "lon": longitude})
+        if response.status_code == 200:
+            return response.json()

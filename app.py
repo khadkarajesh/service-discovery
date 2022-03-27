@@ -1,32 +1,23 @@
+import logging.config
+
 from dotenv import load_dotenv
-from flask import Flask, request
-from flask_restful import Api, Resource
+from flask import Flask
+from flask_restful import Api
 
-import logging
+from core.logger import config
+from data.transformer import fetch_city
+from resources.city_extractor_resource import CityExtractor
+from resources.service_discovery_resource import ServiceDiscovery
 
-from data import get_services
-from services.location_service import LocationService
-
-logging.basicConfig(level=logging.DEBUG)
+logging.config.dictConfig(config)
 
 load_dotenv(".env")
 app = Flask(__name__)
 api = Api(app)
 
-
-class ServiceDiscovery(Resource):
-    @classmethod
-    def get(cls):
-        user_location = request.args.get("q")
-        location_service = LocationService(user_location)
-        payload = location_service.search()
-        if len(payload.get('features')):
-            city = payload.get('features')[0].get('properties').get('city')
-            return get_services(city)
-        return {"message": "Couldn't find your location"}
-
-
 api.add_resource(ServiceDiscovery, '/discover')
+api.add_resource(CityExtractor, '/extract')
 
 if __name__ == '__main__':
     app.run()
+    fetch_city()
