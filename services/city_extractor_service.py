@@ -40,19 +40,6 @@ def fetch_city():
                 file_with_city.writelines(result)
 
 
-def generate_code_name_mapper():
-    with open(TELECOM_FILE) as f:
-        data = {}
-        for line in f:
-            line = line.rstrip()
-            code = line.split(",")[3]
-            name = line.split(",")[2]
-            name = re.sub(r'\([^()]*\)', '', name)
-            data[code] = name.strip()
-        with open(CODE_NAME_FILE, "w") as file:
-            json.dump(data, file, ensure_ascii=False, indent=2)
-
-
 def map_code_to_name(code):
     with open(CODE_NAME_FILE, "r") as file:
         mapper = json.load(file)
