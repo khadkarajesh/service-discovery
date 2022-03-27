@@ -1,3 +1,4 @@
+import csv
 import re
 
 from data.transformers.data_transformer import DataTransformer
@@ -13,6 +14,8 @@ class NameTransformer(DataTransformer):
 
     def _extract(self):
         with open(self.input_file) as f:
+            reader = csv.reader(f)
+            next(reader)
             for line in f:
                 line = line.rstrip()
                 code = line.split(",")[3]

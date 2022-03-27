@@ -2,7 +2,6 @@ import concurrent.futures
 import csv
 import json
 import logging
-import re
 from pathlib import Path
 
 from services.location_service import LocationService
