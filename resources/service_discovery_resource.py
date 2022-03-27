@@ -9,8 +9,8 @@ class ServiceDiscovery(Resource):
     @classmethod
     def get(cls):
         user_location = request.args.get("q")
-        location_service = LocationService(user_location)
-        payload = location_service.search()
+        location_service = LocationService()
+        payload = location_service.search(user_location)
         if len(payload.get('features')):
             city = payload.get('features')[0].get('properties').get('city')
             return get_services(city)
