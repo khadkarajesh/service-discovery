@@ -20,7 +20,7 @@ class LocationService:
         response = self.session.get(search_url, params={'q': location})
         if response.status_code == 200:
             return response.json()
-        raise BaseError(message=errors.get("GEO_CODE_FAILURE"), error="GEO_CODE_FAILURE", status_code=500)
+        raise BaseError(message=errors.get("GEO_CODE_FAILURE"))
 
     def reverse(self, longitude, latitude):
         reverse_geocode_url = self.base_url + "/reverse"
