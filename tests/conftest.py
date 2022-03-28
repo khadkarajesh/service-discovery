@@ -1,6 +1,7 @@
 import pytest
 
 from data.transformers.name_transformer import NameTransformer
+from data.transformers.service_transformer import ServiceTransformer
 from services.location_service import LocationService
 
 base_url = "https://api-adresse.data.gouv.fr"
@@ -9,6 +10,11 @@ base_url = "https://api-adresse.data.gouv.fr"
 @pytest.fixture
 def name_transformer():
     return NameTransformer("input_file", "output_file")
+
+
+@pytest.fixture
+def service_transformer():
+    return ServiceTransformer("input_file", "output_file")
 
 
 @pytest.fixture

@@ -22,13 +22,13 @@ class ServiceTransformer(DataTransformer):
                         self.data[city][name] = {
                             "2G": data[3] == '1',
                             "3G": data[4] == '1',
-                            "4G": data[4] == '1'
+                            "4G": data[5] == '1'
                         }
                     else:
                         self.data[city] = {
                             name: {
                                 "2G": data[3] == '1',
                                 "3G": data[4] == '1',
-                                "4G": data[4] == '1'
+                                "4G": data[5] == '1'
                             }
                         }
