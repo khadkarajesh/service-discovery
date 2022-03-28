@@ -105,4 +105,6 @@ Response, 200
 }
 ```
 
+### Issues
+Couldn't get the address detail for 50% of the lambert coordinates from api ```https://api-adresse.data.gouv.fr/search```.
 

@@ -12,7 +12,7 @@ errors = {
 
 class LocationService:
     def __init__(self):
-        self.base_url = os.environ.get('ADDRESS_SERVICE_API_BASE_URL', 'https://api-adresse.data.gouv.fr')
+        self.base_url = os.environ.get('ADDRESS_SERVICE_API_BASE_URL')
         self.session = requests.Session()
 
     def search(self, location):
