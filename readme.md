@@ -1,3 +1,12 @@
+## Table of Contents
+1. [Architecture Diagram](#architecture-diagram)
+2. [How to Run Application](#run-application)
+3. [Run Test Cases](#run-test-cases)
+4. [Background Job](#background-job)
+5. [Monitor Background Task](#monitor-background-task)
+6. [API](#service-discovery)
+
+
 ### Architecture Diagram
 ![Architecture Diagram](media/architecture.png)
 
