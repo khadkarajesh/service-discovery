@@ -1,5 +1,7 @@
-### How to Run Application
+### Architecture Diagram
+![Architecture Diagram](media/architecture.png)
 
+### How to Run Application
 1. [Install Requirements](#install-requirements)
 2. [Setup Redis](#setup-redis)
 3. [Run Application](#run-application)
@@ -33,6 +35,11 @@ rq worker --with-scheduler
 #### Run Application
 ```shell
 python app.py
+```
+### Run Test Cases
+Navigate to the project directory and execute command
+```shell
+pytest
 ```
 
 ### Monitor Background Task
@@ -88,6 +95,5 @@ Response, 200
 	"message": "job initiated to fetch city for networks"
 }
 ```
-
 
 
