@@ -106,5 +106,5 @@ Response, 200
 ```
 
 ### Issues
-Couldn't get the address detail for 50% of the lambert coordinates from api ```https://api-adresse.data.gouv.fr/search```.
+Couldn't get the address detail for 30% of the lambert coordinates from api ```https://api-adresse.data.gouv.fr/search``` as it sends empty response. Hence, we can see only ~40k record in ```networks_with_city.txt ```
 
