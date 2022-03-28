@@ -1,11 +1,12 @@
 class BaseError(Exception):
-    def __init__(self, status_code, message, error):
-        self.status_code = status_code
+    def __init__(self, message, status_code=500, payload=None):
+        Exception.__init__(self)
         self.message = message
-        self.error = error
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
 
-    def to_response(self):
-        return {
-                   "error": self.error,
-                   "message": self.message
-               }, self.status_code
+    def to_dict(self):
+        rv = dict(self.payload or ())
+        rv['message'] = self.message
+        return rv

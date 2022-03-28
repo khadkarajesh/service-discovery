@@ -1,32 +1,53 @@
+import logging.config
+
+import rq_dashboard
 from dotenv import load_dotenv
-from flask import Flask, request
-from flask_restful import Api, Resource
+from flask import Flask, jsonify
+from flask_restful import Api
+from werkzeug.exceptions import HTTPException
 
-import logging
+from core import rq
+from core.logger import config
+from exceptions import BaseError
+from resources.city_extractor_resource import CityExtractor
+from resources.service_discovery_resource import ServiceDiscovery
 
-from data import get_services
-from services.location_service import LocationService
-
-logging.basicConfig(level=logging.DEBUG)
+logging.config.dictConfig(config)
 
 load_dotenv(".env")
-app = Flask(__name__)
-api = Api(app)
 
 
-class ServiceDiscovery(Resource):
-    @classmethod
-    def get(cls):
-        user_location = request.args.get("q")
-        location_service = LocationService(user_location)
-        payload = location_service.search()
-        if len(payload.get('features')):
-            city = payload.get('features')[0].get('properties').get('city')
-            return get_services(city)
-        return {"message": "Couldn't find your location"}
+def create_app():
+    flask_app = Flask(__name__)
+    flask_app.config['PROPAGATE_EXCEPTIONS'] = True
+    rq.init_app(flask_app)
+
+    api = Api(flask_app)
+    api.add_resource(ServiceDiscovery, '/discover')
+    api.add_resource(CityExtractor, '/extract')
+    flask_app.config.from_object(rq_dashboard.default_settings)
+    flask_app.register_blueprint(rq_dashboard.blueprint, url_prefix="/rq")
+
+    return flask_app
 
 
-api.add_resource(ServiceDiscovery, '/discover')
+app = create_app()
+
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    code = 500
+    if isinstance(e, HTTPException):
+        code = e.code
+    return jsonify(error=str(e)), code
+
+
+@app.errorhandler(BaseError)
+def handle_base_exception(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
 
 if __name__ == '__main__':
     app.run()
