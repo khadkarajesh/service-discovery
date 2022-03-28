@@ -42,4 +42,4 @@ def fetch_city():
 def map_code_to_name(code):
     with open(CODE_NAME_FILE, "r") as file:
         mapper = json.load(file)
-        return mapper.get(code)
+        return mapper.get(code, "unknown")

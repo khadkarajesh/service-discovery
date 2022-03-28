@@ -4,7 +4,7 @@ from _pytest.python_api import raises
 from tests.conftest import base_url
 from exceptions import BaseError
 
-expected_success_address_response = {
+success_address = {
     "type": "FeatureCollection",
     "version": "draft",
     "features": [
@@ -40,6 +40,11 @@ expected_success_address_response = {
     "query": "8 bd du port",
     "limit": 1
 }
+success_address_with_empty_features = {
+    "type": "FeatureCollection",
+    "version": "draft",
+    "features": []
+}
 
 
 def test_search_should_return_address(monkeypatch, location_service):
@@ -49,13 +54,13 @@ def test_search_should_return_address(monkeypatch, location_service):
             self.url = base_url + "/search"
 
         def json(self):
-            return expected_success_address_response
+            return success_address
 
     def mock_get(*args, **kwargs):
         return MockResponse()
 
     monkeypatch.setattr(requests.Session, 'get', mock_get)
-    assert expected_success_address_response == location_service.search("8 bd du port")
+    assert success_address == location_service.search("8 bd du port")
 
 
 def test_search_should_raise_exception(monkeypatch, location_service):
@@ -65,7 +70,7 @@ def test_search_should_raise_exception(monkeypatch, location_service):
             self.url = base_url + "/search"
 
         def json(self):
-            return expected_success_address_response
+            return success_address
 
     def mock_get(*args, **kwargs):
         return MockResponse()
@@ -82,13 +87,13 @@ def test_reverse_should_return_address(monkeypatch, location_service):
             self.url = base_url + "/reverse"
 
         def json(self):
-            return expected_success_address_response
+            return success_address
 
     def mock_get(*args, **kwargs):
         return MockResponse()
 
     monkeypatch.setattr(requests.Session, 'get', mock_get)
-    assert expected_success_address_response == location_service.reverse(latitude=10000, longitude=2000)
+    assert success_address == location_service.reverse(latitude=10000, longitude=2000)
 
 
 def test_reverse_should_return_none(monkeypatch, location_service):
@@ -98,7 +103,7 @@ def test_reverse_should_return_none(monkeypatch, location_service):
             self.url = base_url + "/reverse"
 
         def json(self):
-            return expected_success_address_response
+            return success_address
 
     def mock_get(*args, **kwargs):
         return MockResponse()
