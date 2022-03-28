@@ -2,6 +2,7 @@ import json
 
 import pytest
 
+from app import create_app
 from data.transformers.name_transformer import NameTransformer
 from data.transformers.service_transformer import ServiceTransformer
 from services.location_service import LocationService
@@ -41,3 +42,22 @@ def env_setup(monkeypatch):
 @pytest.fixture(scope="package")
 def city_map_content():
     return json.dumps({"quessant": {"Orange": {"2G": True, "3G": True, "4G": False}}})
+
+
+@pytest.fixture()
+def app():
+    app = create_app()
+    app.config.update({
+        "TESTING": True,
+    })
+    yield app
+
+
+@pytest.fixture()
+def client(app):
+    return app.test_client()
+
+
+@pytest.fixture()
+def runner(app):
+    return app.test_cli_runner()
