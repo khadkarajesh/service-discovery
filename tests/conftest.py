@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from data.transformers.name_transformer import NameTransformer
@@ -34,3 +36,8 @@ def location_service():
 @pytest.fixture(autouse=True)
 def env_setup(monkeypatch):
     monkeypatch.setenv('ADDRESS_SERVICE_API_BASE_URL', base_url)
+
+
+@pytest.fixture(scope="package")
+def city_map_content():
+    return json.dumps({"quessant": {"Orange": {"2G": True, "3G": True, "4G": False}}})
