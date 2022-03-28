@@ -1,7 +1,7 @@
 import requests
 from _pytest.python_api import raises
 
-from conftest import base_url
+from tests.conftest import base_url
 from exceptions import BaseError
 
 expected_success_address_response = {
