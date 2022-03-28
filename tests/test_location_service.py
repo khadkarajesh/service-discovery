@@ -1,10 +1,10 @@
 import requests
 from _pytest.python_api import raises
 
+from conftest import base_url
 from exceptions import BaseError
-from services.location_service import LocationService
 
-response = {
+expected_success_address_response = {
     "type": "FeatureCollection",
     "version": "draft",
     "features": [
@@ -40,44 +40,68 @@ response = {
     "query": "8 bd du port",
     "limit": 1
 }
-base_url = "https://api-adresse.data.gouv.fr"
 
 
-def test_search_should_return_address(monkeypatch):
-    monkeypatch.setenv('ADDRESS_SERVICE_API_BASE_URL', base_url)
-    location_service = LocationService("anything")
-
+def test_search_should_return_address(monkeypatch, location_service):
     class MockResponse(object):
         def __init__(self):
             self.status_code = 200
-            self.url = base_url
+            self.url = base_url + "/search"
 
         def json(self):
-            return response
+            return expected_success_address_response
 
     def mock_get(*args, **kwargs):
         return MockResponse()
 
-    monkeypatch.setattr(requests, 'get', mock_get)
-    assert response == location_service.search()
+    monkeypatch.setattr(requests.Session, 'get', mock_get)
+    assert expected_success_address_response == location_service.search("8 bd du port")
 
 
-def test_search_should_raise_exception(monkeypatch):
-    monkeypatch.setenv("ADDRESS_SERVICE_API_BASE_URL", base_url)
-    location_service = LocationService("anything")
-    assert location_service.base_url == base_url
+def test_search_should_raise_exception(monkeypatch, location_service):
+    class MockResponse(object):
+        def __init__(self):
+            self.status_code = 500
+            self.url = base_url + "/search"
 
+        def json(self):
+            return expected_success_address_response
+
+    def mock_get(*args, **kwargs):
+        return MockResponse()
+
+    monkeypatch.setattr(requests.Session, 'get', mock_get)
+    with raises(BaseError) as e:
+        location_service.search("8 bd du port")
+
+
+def test_reverse_should_return_address(monkeypatch, location_service):
+    class MockResponse(object):
+        def __init__(self):
+            self.status_code = 200
+            self.url = base_url + "/reverse"
+
+        def json(self):
+            return expected_success_address_response
+
+    def mock_get(*args, **kwargs):
+        return MockResponse()
+
+    monkeypatch.setattr(requests.Session, 'get', mock_get)
+    assert expected_success_address_response == location_service.reverse(latitude=10000, longitude=2000)
+
+
+def test_reverse_should_return_none(monkeypatch, location_service):
     class MockResponse(object):
         def __init__(self):
             self.status_code = 400
-            self.url = base_url
+            self.url = base_url + "/reverse"
 
         def json(self):
-            return response
+            return expected_success_address_response
 
     def mock_get(*args, **kwargs):
         return MockResponse()
 
-    monkeypatch.setattr(requests, 'get', mock_get)
-    with raises(BaseError) as e:
-        location_service.search()
+    monkeypatch.setattr(requests.Session, 'get', mock_get)
+    assert not location_service.reverse(latitude=10000, longitude=2000)
